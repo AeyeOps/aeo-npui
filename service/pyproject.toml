@@ -6,6 +6,8 @@ build-backend = "uv_build"
 name = "npu-service"
 version = "0.1.0"
 description = "NPU service: FastAPI + SSE over OpenVINO (Layer 1 of aeo-npui)"
+license = "Apache-2.0"
+authors = [{ name = "AeyeOps", email = "support@aeyeops.com" }]
 requires-python = ">=3.13,<3.14"
 dependencies = [
   "rich>=14.3.3",

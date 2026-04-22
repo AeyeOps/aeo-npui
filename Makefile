@@ -17,7 +17,7 @@ SHELL := /bin/bash
 # doesn't apply.
 PKG_CONFIG_BIN := $(shell test -x /usr/bin/pkg-config && echo /usr/bin/pkg-config || echo pkg-config)
 
-.PHONY: ci all bootstrap build-windows service desktop lock-check no-npm checker-purity
+.PHONY: ci all bootstrap build-windows service desktop lock-check no-npm checker-purity version-check version-sync
 
 # Detect WSL so `make ci` can build both halves of the Tauri deliverable
 # (Linux cargo `desktop` target + Windows `tauri build` bundles) in a
@@ -31,7 +31,7 @@ else
 CI_BUILD_TARGETS := service desktop
 endif
 
-ci: $(CI_BUILD_TARGETS) lock-check no-npm checker-purity
+ci: $(CI_BUILD_TARGETS) lock-check no-npm checker-purity version-check
 
 all: ci
 
@@ -130,3 +130,13 @@ export CHECKER_PURITY_PY
 
 checker-purity:
 	uv run python -c "$$CHECKER_PURITY_PY"
+
+# version-check: fail if any shipping manifest drifts from /VERSION.
+# Canonical version lives at repo root in VERSION; all per-language
+# manifests must match. Bump via `make version-sync` after editing VERSION,
+# or use `scripts/version.py bump X.Y.Z` to do both in one step.
+version-check:
+	uv run python scripts/version.py check
+
+version-sync:
+	uv run python scripts/version.py sync

@@ -34,8 +34,8 @@ Options:
 
 SignPath Foundation eligibility (verified 2026-04 at signpath.org/org):
 
-- Project must be under an OSI-approved open-source license (MIT
-  qualifies).
+- Project must be under an OSI-approved open-source license
+  (Apache-2.0 qualifies; MIT also qualifies if we ever need to flip).
 - Source code must be publicly accessible from day one — SignPath
   verifies build provenance against the public repo.
 - MFA (two-factor authentication) is required on every committer's
@@ -50,7 +50,9 @@ SignPath Foundation eligibility (verified 2026-04 at signpath.org/org):
 Enabling conditions (hard requirements from SignPath, all satisfied by
 this plan):
 
-- **MIT license** is committed to the repo root from Iteration 1.3.
+- **Apache-2.0 license** is committed to the repo root from Iteration 1.3
+  (original commit was MIT; flipped to Apache-2.0 during Iteration 2.5 to
+  gain the explicit patent-grant clause while remaining SignPath-eligible).
 - **Public repo from day 1** — `AeyeOps/aeo-npui` is created public
   per plan pre-flight 1.1.B. Creating private and flipping later is
   possible but adds a coordination step with SignPath reviewers;
@@ -143,7 +145,7 @@ and defeats the "download from GitHub, install anywhere" use case.
 
 ## Status
 
-Accepted. MIT LICENSE commits in Iteration 1.3. Repo is public from
+Accepted. Apache-2.0 LICENSE commits in Iteration 1.3. Repo is public from
 Iteration 1.1.B. SignPath application is filed in 1.1.C. Workflow
 integration in 5.2/5.3. See ADR-006 for the orthogonal Tauri updater
 signing; that one does NOT depend on SignPath approval and ships from

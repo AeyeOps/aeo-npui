@@ -301,7 +301,8 @@ info:
   title: AEO NPUi Service API
   version: 0.1.0
   license:
-    name: MIT
+    name: Apache-2.0
+    identifier: Apache-2.0
 servers:
   - url: http://127.0.0.1:8765
 paths:
