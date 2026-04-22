@@ -1,0 +1,298 @@
+product: aeo-npui
+version: 1
+updated_at: "2026-04-22"
+source: "Migrated from docs/roadmap/console-native-tasks.yaml during Iteration 1.9. Old RN-XX IDs either carry forward with a new ID (referenced by old_id) or are superseded by ADR-004 (Tauri 2 shell retires the Expo/RN web pivot)."
+
+# ---------------------------------------------------------------------------
+# Workstreams (forward backlog)
+# ---------------------------------------------------------------------------
+tasks:
+
+  # --- Native UI (Layer 3) --------------------------------------------------
+
+  - id: N-UI-1
+    workstream: native-ui
+    title: Tauri 2 shell bring-up (scaffold + CSP + capabilities)
+    status: proposed
+    objective: >
+      Stand up a Tauri 2 + Bun + Vite scaffold under `desktop/`, wire the
+      locked-down CSP and minimal capabilities file, and verify
+      `bun run tauri dev` opens a native Windows window that loads a Vite
+      skeleton. No Rust commands; updater endpoint pinned to GitHub
+      Releases; real pubkey from pre-flight 1.1.E committed into
+      `tauri.conf.json`.
+    iteration: 2
+    plan_ref: ["§2.1", "§2.2", "§2.4"]
+    adr_refs: ["ADR-004", "ADR-005", "ADR-006"]
+    dependencies: []
+    enables: [N-UI-2, N-UI-3, ORCH-1, ORCH-2]
+
+  - id: N-UI-2
+    workstream: native-ui
+    title: Frontend migration — Expo/RN screens → React DOM + Vite
+    status: proposed
+    objective: >
+      Port every live screen from the retired `console-native/` Expo tree
+      into `desktop/src/` as plain React + Vite components. Translate
+      `View`/`Text`/`ScrollView`/`Pressable` to HTML equivalents; replace
+      Expo navigation with React Router; reuse Expo-independent state
+      shapes verbatim. Inventory authored as
+      `frontend-migration-inventory.md` by subagent Q (Iteration 3.1);
+      styling decision recorded as ADR-013 in Iteration 3.3. UX contract
+      from archived PRD (startup states, first-prompt retention,
+      transcript continuity, interaction rail, log-follow) is preserved.
+    iteration: 3
+    plan_ref: ["§3.1", "§3.2", "§3.3"]
+    adr_refs: ["ADR-004", "ADR-005"]
+    dependencies: [N-UI-1]
+    enables: [N-UI-3]
+    supersedes_rn: ["RN-02", "RN-03", "RN-04", "RN-05", "RN-06", "RN-07"]
+
+  - id: N-UI-3
+    workstream: native-ui
+    title: E2E via tauri-driver + cross-launch matrix
+    status: proposed
+    objective: >
+      Wire Playwright to the installed Tauri binary through the
+      `tauri-driver` WebDriver bridge (plan §3.5; decision recorded as
+      ADR-012). Implement every scenario in the cross-launch matrix from
+      `docs/testing.md` — each scenario runs twice (Windows-origin and
+      WSL-origin) per ADR-003. Capture visual-regression baselines
+      pre-migration so the port cannot silently break UX.
+    iteration: 3
+    plan_ref: ["§3.5"]
+    adr_refs: ["ADR-003", "ADR-012-pending"]
+    dependencies: [N-UI-1, N-UI-2]
+    enables: []
+    supersedes_rn: ["RN-08"]
+
+  # --- Service layer (Layer 1) ---------------------------------------------
+
+  - id: SVC-1
+    workstream: service-layer
+    title: Implement service-api.md contract (HTTP + SSE, 8 endpoints)
+    status: proposed
+    objective: >
+      Implement every endpoint in `docs/contracts/service-api.md` using
+      FastAPI + sse-starlette. Pydantic validates inputs; malformed
+      bodies return structured errors. `POST /inference` and
+      `POST /endurance` return server-constructed `events_url` /
+      `metrics_url` — clients MUST NOT synthesize these from `run_id`.
+      Replace the TUI-dataclass-to-JSON path with
+      `build_api_snapshot()` returning service-api-compliant dicts
+      (closes ADR-002 + ADR-008).
+    iteration: 4
+    plan_ref: ["§4.2"]
+    adr_refs: ["ADR-002", "ADR-008"]
+    dependencies: []
+    enables: [SVC-3]
+
+  - id: SVC-2
+    workstream: service-layer
+    title: TUI removal + cli.py slim-down + web_api.py → api.py
+    status: proposed
+    objective: >
+      Delete `service/src/npu_service/ui/` and `core/dashboard_debug.py`
+      outright (~750 lines pure TUI). Rewrite `cli.py` from ~1132 lines
+      to ≤150 lines — keep only `status`, `serve`, and probe-command
+      passthroughs; remove `interactive_dashboard`, `run_dashboard`,
+      `dashboard`, TUI endurance loop, `ESCAPE_SEQUENCES`, `AtomicLive`,
+      `render_chat_console`, termios/tty. `git mv web_api.py api.py`
+      and update the one reference in `cli.py:serve`. Delete
+      `reduce_dashboard_state` from `core/events.py`. Remove `rich`
+      from `pyproject.toml` runtime + dev-group; keep `typer`. Pre-inventory
+      TUI-touching tests before deletion and decide
+      delete/rewrite/migrate per file.
+    iteration: 4
+    plan_ref: ["§4.1"]
+    adr_refs: ["ADR-001", "ADR-002"]
+    dependencies: []
+    enables: [SVC-1]
+    supersedes_rn: []
+
+  - id: SVC-3
+    workstream: service-layer
+    title: Extract Windows-side invocation into launcher/ (Layer 2 seed)
+    status: proposed
+    objective: >
+      Create `service/src/npu_service/launcher/`. Move every `pwsh.exe`
+      call, `conda activate npu` wrapper, and Windows-side probe-script
+      dispatcher out of `core/runners.py` (and wherever else they leak)
+      into `launcher/windows.py`. Add `launcher/wsl_bridge.py` stub for
+      WSL-originated operator commands (full implementation in ORCH-1).
+      Launcher is imported from Layer 1 but never from Layer 3 (ADR-002).
+    iteration: 4
+    plan_ref: ["§4.5"]
+    adr_refs: ["ADR-002"]
+    dependencies: [SVC-2]
+    enables: [ORCH-1, ORCH-2]
+
+  # --- Orchestration (Layer 2) ---------------------------------------------
+
+  - id: ORCH-1
+    workstream: orchestration
+    title: Cross-OS launch parity (Windows + WSL origins)
+    status: proposed
+    objective: >
+      Ensure the installed Windows binary launches identically from
+      Windows Start menu, `pwsh.exe`, and WSL via
+      `cmd.exe /c start "" "$LOCALAPPDATA_WIN\\Programs\\aeo-npui\\aeo-npui.exe"`.
+      Implement `launcher/wsl_bridge.py` path translation (`wslpath -w`
+      / `wslpath -u`). Parity verified by the cross-launch matrix in
+      `docs/testing.md` via `tauri-driver` (N-UI-3). Any pixel-level
+      divergence between origins is a P0 defect.
+    iteration: 4
+    plan_ref: ["§2.5", "§4.5"]
+    adr_refs: ["ADR-003"]
+    dependencies: [SVC-3, N-UI-1]
+    enables: []
+
+  - id: ORCH-2
+    workstream: orchestration
+    title: Service autostart + port reservation (8765 default; fail-fast)
+    status: proposed
+    objective: >
+      On first UI paint, Tauri shell pings `GET /health`. If unreachable,
+      Layer 2 spawns `uv run npu-service serve` (via Tauri sidecar in
+      production, via `launcher/windows.py` otherwise). UI re-polls
+      with backoff until 2xx or deadline. Default port 8765; abort on
+      collision rather than silently rebinding — silent port-switching
+      breaks the Tauri CSP `connect-src` pin. Dev override via
+      `NPU_SERVICE_PORT`.
+    iteration: 4
+    plan_ref: ["§4.5"]
+    adr_refs: ["ADR-002", "ADR-008"]
+    dependencies: [SVC-1, SVC-3]
+    enables: []
+
+  # --- CI hardening --------------------------------------------------------
+
+  - id: CI-1
+    workstream: ci
+    title: Matrix OS CI (Ubuntu + Windows) with frozen-lockfile installs
+    status: proposed
+    objective: >
+      Baseline CI runs `uv sync --frozen`, `uv run ruff check`,
+      `uv run ty check`, `uv run pytest` on both Ubuntu and Windows.
+      `ty check` is a hard gate on Ubuntu and `continue-on-error: true`
+      on Windows during the Iteration 1 rollout window — flip to hard
+      gate after two consecutive green Windows runs. Desktop job gated
+      `if: false` until Iteration 2; at activation runs
+      `bun install --frozen-lockfile` + `cargo build --locked`.
+    iteration: 1
+    plan_ref: ["§1.11"]
+    adr_refs: []
+    dependencies: []
+    enables: [CI-2]
+
+  - id: CI-2
+    workstream: ci
+    title: Guard jobs — lock-drift, no-npm, checker-purity, type-codegen drift
+    status: proposed
+    objective: >
+      Four guard jobs fail a PR that violates house rules:
+      (1) lock-drift — `uv sync --locked` (canonical drift check) and
+      `bun install --frozen-lockfile` in a check-only container;
+      (2) no-npm — `test ! -f package-lock.json` at root, `desktop/`,
+      `service/` (tauri-action silently introduces npm if not pinned to
+      Bun); (3) checker-purity — a tomllib/json-parsing Python block
+      that fails on any `mypy|pyright|pytype|pyre-check|pylance`
+      declaration across `pyproject.toml`, `service/pyproject.toml`,
+      and `desktop/package.json` (do not use line-anchored regex —
+      quoted array entries are indented and won't match); (4)
+      type-codegen drift — `scripts/gen-types.sh --check` fails if
+      `desktop/src/api/types.ts` drifts from its Pydantic source
+      (Iteration 4+).
+    iteration: 1
+    plan_ref: ["§1.11"]
+    adr_refs: []
+    dependencies: [CI-1]
+    enables: []
+
+# ---------------------------------------------------------------------------
+# Legacy RN-XX task dispositions
+# ---------------------------------------------------------------------------
+# Source: console-native-tasks.yaml (to be archived alongside the Expo PRD).
+# Every RN-XX task is either migrated (forward task references via
+# `supersedes_rn`) or marked `superseded: ADR-004` because the Tauri 2 shell
+# retires the Expo/RN web workflow wholesale.
+
+legacy_dispositions:
+
+  - old_id: RN-01
+    title: Startup and stop lifecycle hardening
+    disposition: superseded
+    superseded_by: ADR-004
+    note: >
+      Lifecycle concerns (explicit starting/ready/failed states, no zombie
+      sessions, cancellation-safe stop) are now addressed by the Layer-1
+      service contract in docs/contracts/service-api.md (GET /state,
+      POST /session/clear, GET /health) and by the autostart + port-reservation
+      design in ORCH-2. The RN-specific composer-and-state coupling goes
+      away with the UI substrate swap.
+
+  - old_id: RN-02
+    title: First-prompt retention and composer contract
+    disposition: migrated
+    superseded_by: N-UI-2
+    note: >
+      UX contract (first prompt never dropped during startup; /clear and /quit
+      deterministic) is carried forward into the React DOM migration under
+      N-UI-2 and enforced by the service contract (POST /inference returns
+      run_id; POST /session/clear resets).
+
+  - old_id: RN-03
+    title: Desktop split-workspace recompose
+    disposition: migrated
+    superseded_by: N-UI-2
+    note: >
+      Layout thesis (one dominant surface + one secondary context rail)
+      survives the port. Implementation moves from RN View/Text primitives
+      to HTML divs + CSS under N-UI-2; styling decision recorded as ADR-013.
+
+  - old_id: RN-04
+    title: Restore the interaction rail and operator context
+    disposition: migrated
+    superseded_by: N-UI-2
+    note: >
+      Interaction rail is a UX contract preserved through the port. Data
+      comes from SSE (/events stream) per the service-api.md contract.
+
+  - old_id: RN-05
+    title: Mobile composition and viewport-fit pass
+    disposition: migrated
+    superseded_by: N-UI-2
+    note: >
+      Mobile layout concerns survive as responsive CSS in the React DOM
+      port. The Tauri window is desktop-first (1280x800 default per
+      tauri.conf.json); mobile viewport fidelity remains a goal only if
+      the product later ships a browser-accessible mode. Keep in scope for
+      N-UI-2 so CSS is responsive from the start rather than retrofitted.
+
+  - old_id: RN-06
+    title: Log follow semantics and long-session stability
+    disposition: migrated
+    superseded_by: N-UI-2
+    note: >
+      Follow semantics (follow / paused / buffer-rollover stability) carry
+      into the React DOM port under N-UI-2. Log data comes from SSE.
+
+  - old_id: RN-07
+    title: Motion and polish pass
+    disposition: migrated
+    superseded_by: N-UI-2
+    note: >
+      Motion/polish work happens inside the React DOM migration rather than
+      as a separate round — there is no Round 4 equivalent in the Iteration
+      plan. Keep as an N-UI-2 sub-deliverable bounded by the "restrained
+      motion" thesis from the archived PRD.
+
+  - old_id: RN-08
+    title: Incremental Playwright QA inventory and release gate
+    disposition: migrated
+    superseded_by: N-UI-3
+    note: >
+      The "E2E is the release gate" philosophy from the e2e-recovery plan
+      lives forward in docs/testing.md. Concrete wiring moves from
+      Playwright-against-Expo-URL to Playwright-via-tauri-driver under
+      N-UI-3.

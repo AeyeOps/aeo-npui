@@ -1,0 +1,30 @@
+╭────────────────────────────────────────── Interaction ───────────────────────────────────────────╮
+│ [INFO] watch_llm_probe:watch.start - Starting watched NPU LLM probe                              │
+│ [INFO] watch_llm_probe:metric.sample - Resource sample                                           │
+│ [INFO] watch_llm_probe:metric.sample - Resource sample                                           │
+│ [INFO] watch_llm_probe:watch.summary - Completed watched NPU LLM probe                           │
+│                                                                                                  │
+│                                                                                                  │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭────────────────────────────────────────────── KPIs ──────────────────────────────────────────────╮
+│ Mode   dashboard-live                                                                            │
+│ Status ok                                                                                        │
+│ Run    watch-20260320T220638Z                                                                    │
+│ Model  OpenVINO/TinyLlama-1.1B-Chat-v1.0-int4-ov                                                 │
+│                                                                                                  │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────── Summary ─────────────────────────────────────────────╮
+│ NPU  91/91%  ▁█                                                                                  │
+│ CPU  29/43%  █▁                                                                                  │
+│ GPU  0/0%  ▁▁                                                                                    │
+│                                                                                                  │
+│ Use: watch                                                                                       │
+│ Log: /mnt/c/dev/npu/scripts/npu-events.jsonl                                                     │
+│                                                                                                  │
+│                                                                                                  │
+│                                                                                                  │
+│                                                                                                  │
+│                                                                                                  │
+│                                                                                                  │
+│                                                                                                  │
+╰──────────────────────────────────────────────────────────────────────────────────────────────────╯

@@ -1,0 +1,61 @@
+[build-system]
+requires = ["uv_build>=0.10.12,<0.11.0"]
+build-backend = "uv_build"
+
+[project]
+name = "npu-service"
+version = "0.1.0"
+description = "NPU service: FastAPI + SSE over OpenVINO (Layer 1 of aeo-npui)"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+  "rich>=14.3.3",
+  "typer>=0.24.1",
+  "pydantic-settings>=2.0",
+  "fastapi>=0.135.1",
+  "uvicorn[standard]>=0.42.0",
+]
+
+[project.scripts]
+npu-service = "npu_service.cli:app"
+
+[dependency-groups]
+dev = [
+  "pexpect>=4.9.0",
+  "pytest>=8.4.2",
+  "ruff>=0.15.7",
+  "ty>=0.0.24",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.per-file-ignores]
+# Files scheduled for Iteration 4.1 rewrite (TUI removal, web_api.py -> api.py,
+# cli.py shrunk to <=150 lines). Not worth reformatting to satisfy E501 when
+# they are about to be rewritten or deleted.
+"src/npu_service/cli.py" = ["E501"]
+"src/npu_service/ui/**" = ["E501"]
+"src/npu_service/web_api.py" = ["E501"]
+# Legacy e2e harness (archived; superseded by Playwright via tauri-driver,
+# ADR-012 / Iteration 3.5).
+"scripts/e2e_visual_validate.py" = ["E501", "SIM105"]
+
+[tool.ty.environment]
+python-version = "3.13"
+
+[tool.ty.terminal]
+error-on-warning = true
+
+[tool.ty.src]
+# Files scheduled for Iteration 4.1 rewrite or deletion. Re-enable when
+# Iteration 4 lands; the rewritten files should type-check cleanly from
+# the start.
+exclude = [
+  "src/npu_service/ui/**",       # TUI; retired per ADR-001 in 4.1
+  "src/npu_service/web_api.py",  # renamed to api.py in 4.1
+  "scripts/e2e_visual_validate.py",  # legacy; superseded by tauri-driver (ADR-012)
+]

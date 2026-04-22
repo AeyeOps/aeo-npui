@@ -1,0 +1,26 @@
+# Windows winget package IDs for aeo-npui. One ID per line; blank
+# lines and `#` comments are ignored by bootstrap.ps1.
+#
+# Installed with:
+#   winget install --id <PackageID> --accept-package-agreements \
+#                  --accept-source-agreements --silent
+#
+# Edit rationale notes inline.
+
+# --- Tauri 2 Windows prerequisites ---
+# MSVC C++ toolchain (linker for cargo build; WebView2 headers pulled in).
+# NOTE: ~4 GB download on first install.
+Microsoft.VisualStudio.2022.BuildTools
+# WebView2 runtime. Pre-installed on Windows 11; installs/updates on Win10.
+Microsoft.EdgeWebView2Runtime
+
+# --- Language toolchains ---
+# Rust via rustup (bootstraps MSVC target automatically with BuildTools present).
+Rustlang.Rustup
+# Bun — JS package manager + runtime for desktop/ workspace.
+Oven-sh.Bun
+
+# --- Shell ---
+# PowerShell 7+ (pwsh.exe). bootstrap.sh prefers pwsh.exe when delegating
+# from WSL; on first boot the fallback is Windows PowerShell 5.x.
+Microsoft.PowerShell

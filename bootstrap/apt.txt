@@ -1,0 +1,17 @@
+# System packages for Debian/Ubuntu/WSL. One package per line; blank
+# lines and `#` comments are ignored by bootstrap.sh.
+#
+# Installed with:
+#   sudo apt-get install -y --no-install-recommends $(contents of this file)
+#
+# Edit rationale notes inline so future maintainers know *why* a package
+# is here. Removing a line means the library is no longer required.
+
+# --- Tauri 2 Linux prerequisites (WebKitGTK WebView + system chrome) ---
+libwebkit2gtk-4.1-dev
+libayatana-appindicator3-dev
+librsvg2-dev
+libxdo-dev
+libssl-dev
+build-essential
+pkg-config

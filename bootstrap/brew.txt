@@ -1,0 +1,11 @@
+# macOS Homebrew formulae for aeo-npui. One formula per line; blank
+# lines and `#` comments are ignored by bootstrap.sh.
+#
+# Installed with:
+#   brew install $(contents of this file)
+#
+# macOS is NOT a current build target. This file exists so the
+# cross-platform pattern is symmetric; add formulae here if/when the
+# app gains a macOS target. Xcode Command Line Tools (Tauri's macOS
+# prerequisite) are installed separately via `xcode-select --install`
+# and are not brew-managed.

@@ -1,0 +1,13 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main",
+  "description": "Main window: core ops + updater check/install + process restart. Nothing else — Layer-3 does not invoke NPU operations directly.",
+  "windows": ["main"],
+  "permissions": [
+    "core:default",
+    "updater:default",
+    "updater:allow-check",
+    "updater:allow-download-and-install",
+    "process:allow-restart"
+  ]
+}

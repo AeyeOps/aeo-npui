@@ -1,0 +1,40 @@
+╭────────── Interaction ──────────╮╭──────────────────────────────────────────────── KPIs ─────────────────────────────────────────────────╮
+│ [INFO]                          ││ Mode    dashboard-live                                                                                │
+│ watch_llm_probe:watch.start -   ││ Status  ok                                                                                            │
+│ Starting watched NPU LLM probe  ││ Command watch                                                                                         │
+│ [INFO]                          ││ Run ID  watch-20260320T220638Z                                                                        │
+│ watch_llm_probe:metric.sample - ││ Model   OpenVINO/TinyLlama-1.1B-Chat-v1.0-int4-ov                                                     │
+│ Resource sample                 ││                                                                                                       │
+│ [INFO]                          │╰───────────────────────────────────────────────────────────────────────────────────────────────────────╯
+│ watch_llm_probe:metric.sample - │╭─────────────────────────────────────────── Rolling Trends ────────────────────────────────────────────╮
+│ Resource sample                 ││ ┏━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━━━━━━━┳━━━━━━━┓                                                      │
+│ [INFO]                          ││ ┃ Metric   ┃     Current ┃        Peak ┃ Trend ┃                                                      │
+│ watch_llm_probe:watch.summary - ││ ┡━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━━━━━━━╇━━━━━━━┩                                                      │
+│ Completed watched NPU LLM probe ││ │ NPU util │       91.0% │       91.0% │ ▁█    │                                                      │
+│                                 ││ │ CPU util │       29.0% │       43.0% │ █▁    │                                                      │
+│                                 ││ │ CPU mem  │ 38121.5 MiB │ 38121.5 MiB │ ▁█    │                                                      │
+│                                 ││ │ GPU util │        0.0% │        0.0% │ ▁▁    │                                                      │
+│                                 ││ │ GPU mem  │     5.7 MiB │     5.7 MiB │ ▁▁    │                                                      │
+│                                 ││ └──────────┴─────────────┴─────────────┴───────┘                                                      │
+│                                 ││                                                                                                       │
+│                                 │╰───────────────────────────────────────────────────────────────────────────────────────────────────────╯
+│                                 │╭────────────────────────────────────────────── Artifacts ──────────────────────────────────────────────╮
+│                                 ││ Event log      /mnt/c/dev/npu/scripts/npu-events.jsonl                                                │
+│                                 ││ Windows root   C:\dev\npu                                                                             │
+│                                 ││ WSL root       /mnt/c/dev/npu                                                                         │
+│                                 ││ Run ID         watch-20260320T220638Z                                                                 │
+│                                 ││ NPU state      active                                                                                 │
+│                                 ││ NPU source     gpu_engine_luid_inference                                                              │
+│                                 ││ probe_artifact C:\dev\npu\artifacts\llm-probe\llm-probe-20260320T220638Z.json                         │
+│                                 ││ watch_artifact C:\dev\npu\artifacts\watch\watch-20260320T220638Z.json                                 │
+│                                 ││                                                                                                       │
+│                                 ││ Notes                                                                                                 │
+│                                 ││ - Live dashboard is reading structured event rows.                                                    │
+│                                 ││ - Ctrl+C exits the dashboard loop.                                                                    │
+│                                 ││ - Use --command to launch a backend run from the dashboard.                                           │
+│                                 ││                                                                                                       │
+│                                 ││                                                                                                       │
+│                                 ││                                                                                                       │
+│                                 ││                                                                                                       │
+│                                 ││                                                                                                       │
+╰─────────────────────────────────╯╰───────────────────────────────────────────────────────────────────────────────────────────────────────╯

@@ -1,0 +1,31 @@
+{
+  "name": "console-native",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web",
+    "chrome:cdp:start": "bash ./scripts/windows_chrome_cdp.sh start http://127.0.0.1:19006",
+    "chrome:cdp:prepare-profile": "python3 ./scripts/repair_profile_exit_type.py --profile-root /mnt/c/dev/chrome-profile --profile-directory Default",
+    "chrome:cdp:probe": "bash ./scripts/windows_chrome_cdp.sh probe",
+    "chrome:cdp:attach": "bash ./scripts/windows_chrome_cdp.sh attach http://127.0.0.1:19006 ./output/windows-chrome-cdp.png",
+    "chrome:cdp:stop": "bash ./scripts/windows_chrome_cdp.sh stop",
+    "chrome:cdp:print": "bash ./scripts/windows_chrome_cdp.sh print"
+  },
+  "dependencies": {
+    "expo": "~55.0.8",
+    "expo-status-bar": "~55.0.4",
+    "playwright": "^1.58.2",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "react-native": "0.83.2",
+    "react-native-web": "^0.21.0"
+  },
+  "devDependencies": {
+    "@types/react": "~19.2.2",
+    "typescript": "~5.9.2"
+  },
+  "private": true
+}

@@ -1,0 +1,7 @@
+{
+  "name": "aeo-npui",
+  "private": true,
+  "version": "0.0.0",
+  "description": "NPU-first local LLM operator app: FastAPI service + Tauri 2 desktop",
+  "workspaces": ["desktop"]
+}

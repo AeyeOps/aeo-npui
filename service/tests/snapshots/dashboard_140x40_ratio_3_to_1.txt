@@ -1,0 +1,40 @@
+╭───────────────────────────────────────────── Interaction ─────────────────────────────────────────────╮╭───────────── KPIs ──────────────╮
+│ [INFO] watch_llm_probe:watch.start - Starting watched NPU LLM probe                                   ││ Mode    dashboard-live          │
+│ [INFO] watch_llm_probe:metric.sample - Resource sample                                                ││ Status  ok                      │
+│ [INFO] watch_llm_probe:metric.sample - Resource sample                                                ││ Command watch                   │
+│ [INFO] watch_llm_probe:watch.summary - Completed watched NPU LLM probe                                ││ Run ID  watch-20260320T220638Z  │
+│                                                                                                       ││ Model   OpenVINO/TinyLlama-1.1… │
+│                                                                                                       ││                                 │
+│                                                                                                       │╰─────────────────────────────────╯
+│                                                                                                       │╭──────── Rolling Trends ─────────╮
+│                                                                                                       ││ ┏━━━━━━━┳━━━━━━┳━━━━━━━┳━━━━━━┓ │
+│                                                                                                       ││ ┃ Metr… ┃ Cur… ┃  Peak ┃ Tre… ┃ │
+│                                                                                                       ││ ┡━━━━━━━╇━━━━━━╇━━━━━━━╇━━━━━━┩ │
+│                                                                                                       ││ │ NPU   │ 91.… │ 91.0% │ ▁█   │ │
+│                                                                                                       ││ │ util  │      │       │      │ │
+│                                                                                                       ││ │ CPU   │ 29.… │ 43.0% │ █▁   │ │
+│                                                                                                       ││ │ util  │      │       │      │ │
+│                                                                                                       ││ │ CPU   │ 381… │ 3812… │ ▁█   │ │
+│                                                                                                       ││ │ mem   │  MiB │   MiB │      │ │
+│                                                                                                       ││ │ GPU   │ 0.0% │  0.0% │ ▁▁   │ │
+│                                                                                                       │╰─────────────────────────────────╯
+│                                                                                                       │╭─────────── Artifacts ───────────╮
+│                                                                                                       ││ Event log      /mnt/c/dev/npu/… │
+│                                                                                                       ││ Windows root   C:\dev\npu       │
+│                                                                                                       ││ WSL root       /mnt/c/dev/npu   │
+│                                                                                                       ││ Run ID         watch-20260320T… │
+│                                                                                                       ││ NPU state      active           │
+│                                                                                                       ││ NPU source     gpu_engine_luid… │
+│                                                                                                       ││ probe_artifact C:\dev\npu\arti… │
+│                                                                                                       ││ watch_artifact C:\dev\npu\arti… │
+│                                                                                                       ││                                 │
+│                                                                                                       ││ Notes                           │
+│                                                                                                       ││ - Live dashboard is reading     │
+│                                                                                                       ││ structured event rows.          │
+│                                                                                                       ││ - Ctrl+C exits the dashboard    │
+│                                                                                                       ││ loop.                           │
+│                                                                                                       ││ - Use --command to launch a     │
+│                                                                                                       ││ backend run from the dashboard. │
+│                                                                                                       ││                                 │
+│                                                                                                       ││                                 │
+╰───────────────────────────────────────────────────────────────────────────────────────────────────────╯╰─────────────────────────────────╯

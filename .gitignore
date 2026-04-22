@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# Node / Bun
+node_modules/
+
+# Legacy Expo (console-native/, retired in Iteration 3)
+.expo/
+.metro-health-check*
+expo-env.d.ts
+web-build/
+
+# Build outputs
+dist/
+target/
+output/
+
+# OS / editor
+.DS_Store
+*.tsbuildinfo
+
+# Secrets — never commit
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+*.p8
+*.p12
+*.jks
+*.mobileprovision
+
+# Tauri updater pubkey staging (local-only; embedded into tauri.conf.json at scaffold time)
+scripts/sign-keys/
+
+# Session scratch
+.claude/
+tmp/

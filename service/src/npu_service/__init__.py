@@ -1,0 +1,1 @@
+"""NPU operator console package."""
